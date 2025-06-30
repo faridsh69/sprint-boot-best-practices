@@ -7,5 +7,7 @@ abstract class Car implements VehicleInterface {
         this.price = price;
     }
 
-    public abstract int getPrice();
+    public int getPrice() {
+        return price;
+    }
 }

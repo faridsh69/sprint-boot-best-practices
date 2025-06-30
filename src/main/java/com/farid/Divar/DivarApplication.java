@@ -6,16 +6,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
 @SpringBootApplication
 @RestController
-public class DivarApplication {
+public class DivarApplication  {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DivarApplication.class, args);
 	}
 
 	@GetMapping("/")
-	public int index() {
+	public String index() {
 //		int num = 2222;
 //		boolean kir = true;
 //		byte byte1 = 10;
@@ -45,9 +49,37 @@ public class DivarApplication {
 //		this.cons(benz.price);
 
 		Benz benz2 = new Benz(150);
-		cons(benz2.getPrice());
+//		benz2.start(); run threat
+		console(benz2.getPrice());
+		TypeData<roles> xxx = new  TypeData<>(roles.USER);
 
-		return benz2.getPrice();
+		System.out.println(xxx.value);
+		LocalDate date = LocalDate.now(); // Create a date object
+		System.out.println(date); // Display the current date
+
+		String[] numbersx = {"1111", "22222"};
+		this.printArray(numbersx);
+
+		try {
+			int xx = 1 / 1;
+//			throw new ArithmeticException("Access denied - You must be at least 18 years old.");
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		ArrayList<Integer> numbers = new ArrayList<>();
+		numbers.add(5);
+		Consumer<Integer> method = (n) -> { System.out.println(n); };
+		numbers.forEach( method );
+
+		FunctionInterface sum = (a, b) -> a + b;
+		FunctionInterface mult = (a, b) -> a * b;
+		console(sum.calc(1, 7));
+		console(mult.calc(1, 7));
+		console(benz2.getPrice());
+
+		return "QWE QWE";
 	}
 
 	@GetMapping("/hello")
@@ -59,7 +91,24 @@ public class DivarApplication {
 //		System.out.println( String.join(", ", args));
 //	}
 
-	final void cons (int str) {
-		System.out.println(str);
+	public static <T> void printArray(T[] arr) {
+		for (T item : arr) {
+			System.out.println(item);
+		}
 	}
+
+	public static <T> void console(T any) {
+
+		System.out.println(any);
+
+	}
+}
+
+enum roles {
+	ADMIN,
+	USER
+}
+
+interface FunctionInterface {
+	int calc(int a, int b);
 }

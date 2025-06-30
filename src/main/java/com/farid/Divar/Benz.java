@@ -5,7 +5,12 @@ public class Benz extends Car {
         super(price);
     }
 
+    @Override
     public int getPrice() {
-        return price;
+        return price + 2;
+    }
+
+    public void run() {
+        System.out.println("This code is running in a thread");
     }
 }
