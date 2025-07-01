@@ -1,9 +1,9 @@
-package com.farid.Divar;
+package com.farid.Divar.Test;
 
 abstract class Car implements VehicleInterface {
     public int price = 0;
 
-    Car (int price) {
+    Car(int price) {
         this.price = price;
     }
 

@@ -1,4 +1,4 @@
-package com.farid.Divar;
+package com.farid.Divar.Test;
 
 public class Benz extends Car {
     Benz(int price) {
