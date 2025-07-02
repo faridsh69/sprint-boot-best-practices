@@ -19,50 +19,50 @@ import com.farid.Divar.Repositories.UserRepository;
 import com.farid.Divar.Requests.UserRequest;
 import com.farid.Divar.Resources.UserResource;
 
-
 @RestController
 public class UserController {
 
-	private final UserRepository userRepository;
+	private final UserRepository repository;
 
-	public UserController(UserRepository userRepository) {
-		this.userRepository = userRepository;
+	public UserController(UserRepository repository) {
+		this.repository = repository;
 	}
 
 	@GetMapping("/users")
 	public JsonResponse<List<UserResource>> index() {
-		return new JsonResponse<>(userRepository.findAll().stream().map(UserResource::new).toList());
+		return new JsonResponse<>(repository.findAll().stream().map(UserResource::new).toList());
 	}
 
 	@GetMapping("users/{id}")
 	public ResponseEntity<JsonResponse<UserResource>> show(@PathVariable int id) {
-		return userRepository.findById(id).map(user -> {
-			return ResponseEntity.ok(new JsonResponse<>(new UserResource(user)));
+		return repository.findById(id).map(entity -> {
+			return ResponseEntity.ok(new JsonResponse<>(new UserResource(entity)));
 		}).orElseThrow(EntityNotFoundException::new);
 	}
 
 	@PostMapping("/users")
-	public ResponseEntity<JsonResponse<UserResource>> create(@RequestBody User user) {
-		User savedUser = userRepository.save(user);
+	public ResponseEntity<JsonResponse<UserResource>> create(@RequestBody User entity) {
+		User savedEntity = repository.save(entity);
 
-		return ResponseEntity.ok(new JsonResponse<>(new UserResource(savedUser)));
+		return ResponseEntity.ok(new JsonResponse<>(new UserResource(savedEntity)));
 	}
 
 	@PutMapping("users/{id}")
-	public ResponseEntity<JsonResponse<UserResource>> update(@PathVariable int id, @RequestBody UserRequest updatingUser) {
-		return userRepository.findById(id).map(user -> {
-			user.updateData(updatingUser);
-			userRepository.save(user);
+	public ResponseEntity<JsonResponse<UserResource>> update(@PathVariable int id, @RequestBody UserRequest updatingEntity) {
+		return repository.findById(id).map(entity -> {
+			entity.updateData(updatingEntity);
+			repository.save(entity);
 
-			return ResponseEntity.ok(new JsonResponse<>(new UserResource(user)));
+			return ResponseEntity.ok(new JsonResponse<>(new UserResource(entity)));
 		}).orElseThrow(EntityNotFoundException::new);
 	}
 
 	@DeleteMapping("/users/{id}")
-	public ResponseEntity<User> delete(@PathVariable int id) {
-		return userRepository.findById(id).map(user -> {
-			userRepository.delete(user);
-			return ResponseEntity.ok(user);
+	public ResponseEntity<JsonResponse<UserResource>> delete(@PathVariable int id) {
+		return repository.findById(id).map(entity -> {
+			repository.delete(entity);
+
+			return ResponseEntity.ok(new JsonResponse<>(new UserResource(entity)));
 		}).orElseThrow(EntityNotFoundException::new);
 	}
 
