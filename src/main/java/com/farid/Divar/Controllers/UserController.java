@@ -1,13 +1,19 @@
 package com.farid.Divar.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.farid.Divar.Configs.AppConfig;
 import com.farid.Divar.Models.User;
 import com.farid.Divar.Repositories.UserRepository;
+import com.farid.Divar.Requests.UserRequest;
+
 
 @RestController
 public class UserController {
@@ -20,12 +26,37 @@ public class UserController {
 
 	@GetMapping("/users")
 	public Iterable<User> index() {
-		return this.userRepository.findAll();
+		return userRepository.findAll();
+	}
+
+	@GetMapping("users/{id}")
+	public ResponseEntity<User> show(@PathVariable int id) {
+		return userRepository.findById(id).map(user -> {
+			return ResponseEntity.ok(user);
+		}).orElse(ResponseEntity.notFound().build());
 	}
 
 	@PostMapping("/users")
 	public User create(@RequestBody User user) {
-		return this.userRepository.save(user);
+		return userRepository.save(user);
+	}
+
+	@PutMapping("users/{id}")
+	public ResponseEntity<User> update(@PathVariable int id, @RequestBody UserRequest updatingUser) {
+		return userRepository.findById(id).map(user -> {
+			user.updateData(updatingUser);
+			userRepository.save(user);
+
+			return ResponseEntity.ok(user);
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
+	@DeleteMapping("/users/{id}")
+	public ResponseEntity<User> delete(@PathVariable int id) {
+		return userRepository.findById(id).map(user -> {
+			userRepository.delete(user);
+			return ResponseEntity.ok(user);
+		}).orElse(ResponseEntity.notFound().build());
 	}
 
 	@Autowired
