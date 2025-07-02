@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.farid.Divar.Configs.AppConfig;
+import com.farid.Divar.Exceptions.NotFoundException;
 import com.farid.Divar.Models.User;
 import com.farid.Divar.Repositories.UserRepository;
 import com.farid.Divar.Requests.UserRequest;
@@ -33,7 +34,7 @@ public class UserController {
 	public ResponseEntity<User> show(@PathVariable int id) {
 		return userRepository.findById(id).map(user -> {
 			return ResponseEntity.ok(user);
-		}).orElse(ResponseEntity.notFound().build());
+		}).orElseThrow(() -> new NotFoundException(id));
 	}
 
 	@PostMapping("/users")
@@ -48,7 +49,7 @@ public class UserController {
 			userRepository.save(user);
 
 			return ResponseEntity.ok(user);
-		}).orElse(ResponseEntity.notFound().build());
+		}).orElseThrow(() -> new NotFoundException(id));
 	}
 
 	@DeleteMapping("/users/{id}")
@@ -56,7 +57,7 @@ public class UserController {
 		return userRepository.findById(id).map(user -> {
 			userRepository.delete(user);
 			return ResponseEntity.ok(user);
-		}).orElse(ResponseEntity.notFound().build());
+		}).orElseThrow(() -> new NotFoundException(id));
 	}
 
 	@Autowired
