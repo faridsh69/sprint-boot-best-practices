@@ -1,8 +1,11 @@
 package com.farid.Divar.Models;
 
-import jakarta.persistence.*;
-
 import java.time.LocalDate;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -20,11 +23,11 @@ public class User {
 
     private User() {}
 
-//    public User(String firstName, String lastName, LocalDate dateOfBirth) {
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.dateOfBirth = dateOfBirth;
-//    }
+    // public User(String firstName, String lastName, LocalDate dateOfBirth) {
+    // this.firstName = firstName;
+    // this.lastName = lastName;
+    // this.dateOfBirth = dateOfBirth;
+    // }
 
     public Integer getId() {
         return this.id;

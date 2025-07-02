@@ -1,13 +1,13 @@
-package com.farid.Divar;
+package com.farid.Divar.Controllers;
 
-import com.farid.Divar.Models.User;
-import com.farid.Divar.Repositories.Contracts.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.farid.Divar.Configs.AppConfig;
+import com.farid.Divar.Models.User;
+import com.farid.Divar.Repositories.UserRepository;
 
 @RestController
 public class UserController {
@@ -19,22 +19,19 @@ public class UserController {
 	}
 
 	@GetMapping("/users")
-	public Iterable<User> findAllEmployees() {
+	public Iterable<User> index() {
 		return this.userRepository.findAll();
 	}
 
 	@PostMapping("/users")
-	public User addOneEmployee(@RequestBody User user) {
+	public User create(@RequestBody User user) {
 		return this.userRepository.save(user);
 	}
 
 	@Autowired
 	private AppConfig appConfig;
 
-	@GetMapping("/")
-	public String index() {
-//		User user = new User();
-//		System.out.println(user.toString());
-		return "Hello World " + appConfig.getName();
+	public String getAppName() {
+		return appConfig.getName();
 	}
 }
