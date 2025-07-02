@@ -9,10 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users2")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String firstName;
@@ -21,34 +21,26 @@ public class User {
 
     private LocalDate dateOfBirth;
 
-    private User() {}
-
-    public User(String firstName, String lastName, LocalDate dateOfBirth) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-    }
+    protected User() {}
 
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
     public String getFirstName() {
-        return this.firstName;
+        return firstName;
     }
 
     public String getLastName() {
-        return this.lastName;
+        return lastName;
     }
 
     public LocalDate getDateOfBirth() {
-        return this.dateOfBirth;
+        return dateOfBirth;
     }
 
-    public User updateData(UserRequest user) {
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-
-        return this;
+    public void updateData(UserRequest user) {
+        firstName = user.getFirstName();
+        lastName = user.getLastName();
     }
 }
