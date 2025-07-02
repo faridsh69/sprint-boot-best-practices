@@ -45,10 +45,6 @@ public class User {
         return this.dateOfBirth;
     }
 
-    public String getFullName() {
-        return this.firstName + this.lastName;
-    }
-
     public User updateData(UserRequest user) {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();

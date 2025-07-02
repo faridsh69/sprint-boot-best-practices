@@ -1,5 +1,6 @@
 package com.farid.Divar.Controllers;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import com.farid.Divar.Exceptions.NotFoundException;
 import com.farid.Divar.Models.User;
 import com.farid.Divar.Repositories.UserRepository;
 import com.farid.Divar.Requests.UserRequest;
+import com.farid.Divar.Resources.UserResource;
 
 
 @RestController
@@ -26,14 +28,14 @@ public class UserController {
 	}
 
 	@GetMapping("/users")
-	public Iterable<User> index() {
-		return userRepository.findAll();
+	public List<UserResource> index() {
+		return userRepository.findAll().stream().map(UserResource::new).toList();
 	}
 
 	@GetMapping("users/{id}")
-	public ResponseEntity<User> show(@PathVariable int id) {
+	public ResponseEntity<UserResource> show(@PathVariable int id) {
 		return userRepository.findById(id).map(user -> {
-			return ResponseEntity.ok(user);
+			return ResponseEntity.ok(new UserResource(user));
 		}).orElseThrow(() -> new NotFoundException(id));
 	}
 
