@@ -20,11 +20,11 @@ public class User {
 
     private User() {}
 
-    public User(String firstName, String lastName, LocalDate dateOfBirth) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-    }
+//    public User(String firstName, String lastName, LocalDate dateOfBirth) {
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.dateOfBirth = dateOfBirth;
+//    }
 
     public Integer getId() {
         return this.id;
@@ -32,6 +32,10 @@ public class User {
 
     public String getFirstName() {
         return this.firstName;
+    }
+
+    public String getFullName() {
+        return this.firstName + this.lastName;
     }
 
     public String getLastName() {
