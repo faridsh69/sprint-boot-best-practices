@@ -1,9 +1,9 @@
-package com.farid.Divar.Resources;
+package com.farid.Divar.Library;
 
-public class JsonResponse<T> {
+public class ApiResource<T> {
     private final T data;
 
-    public JsonResponse(T data) {
+    public ApiResource(T data) {
         this.data = data;
     }
 
