@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.farid.Divar.Configs.AppConfig;
 import com.farid.Divar.Library.Resources.ApiResource;
@@ -17,9 +18,15 @@ import com.farid.Divar.Repositories.UserRepository;
 import com.farid.Divar.Requests.UserRequest;
 import com.farid.Divar.Resources.UserResource;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
+@RequestMapping(path = "/api/users")
 public class UserController {
+
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
 	private final UserRepository repository;
 
@@ -27,7 +34,7 @@ public class UserController {
 		this.repository = repository;
 	}
 
-	@GetMapping("/users")
+	@GetMapping
 	public ResponseEntity<ApiResource<List<UserResource>>> index() {
 		List<User> users = repository.findAll();
 		List<UserResource> userResources =
@@ -36,7 +43,7 @@ public class UserController {
 		return ResponseEntity.ok(new ApiResource<>(userResources));
 	}
 
-	@GetMapping("users/{id}")
+	@GetMapping("{id}")
 	public ResponseEntity<ApiResource<UserResource>> show(@PathVariable int id) {
 		User entity = repository.findById(id).orElseThrow(EntityNotFoundException::new);
 		UserResource resource = UserResource.from(entity, UserResource.class);
@@ -44,15 +51,19 @@ public class UserController {
 		return ResponseEntity.ok(new ApiResource<>(resource));
 	}
 
-	@PostMapping("/users")
-	public ResponseEntity<ApiResource<UserResource>> create(@RequestBody User entity) {
+	@PostMapping
+	public ResponseEntity<ApiResource<UserResource>> create(@Valid @RequestBody UserRequest request) {
+		// System.out.println(request);
+		// log.info("🚀 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX88888!");
+
+		User entity = request.toEntity();
 		User savedEntity = repository.save(entity);
 		UserResource resource = UserResource.from(savedEntity, UserResource.class);
 
 		return ResponseEntity.ok(new ApiResource<>(resource));
 	}
 
-	@PutMapping("users/{id}")
+	@PutMapping("{id}")
 	public ResponseEntity<ApiResource<UserResource>> update(@PathVariable int id,
 			@RequestBody UserRequest updatingEntity) {
 		return repository.findById(id).map(entity -> {
@@ -64,7 +75,7 @@ public class UserController {
 		}).orElseThrow(EntityNotFoundException::new);
 	}
 
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("{id}")
 	public ResponseEntity<ApiResource<User>> delete(@PathVariable int id) {
 		return repository.findById(id).map(entity -> {
 			repository.delete(entity);
