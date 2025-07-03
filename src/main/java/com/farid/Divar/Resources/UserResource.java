@@ -1,11 +1,11 @@
 package com.farid.Divar.Resources;
 
-import com.farid.Divar.Library.ResourceAbstract;
+import com.farid.Divar.Library.Resources.BaseResource;
 import com.farid.Divar.Models.User;
 import lombok.Getter;
 
 @Getter()
-public class UserResource extends ResourceAbstract<User> {
+public class UserResource extends BaseResource<User> {
   private Integer id;
   private String firstName;
   private String fullName;

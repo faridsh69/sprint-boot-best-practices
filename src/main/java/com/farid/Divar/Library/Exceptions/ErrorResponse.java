@@ -1,4 +1,4 @@
-package com.farid.Divar.Exceptions;
+package com.farid.Divar.Library.Exceptions;
 
 public class ErrorResponse {
   private String error;

@@ -9,20 +9,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
-@Getter
 // @Setter @NoArgsConstructor @AllArgsConstructor
-@Entity
-@Table(name = "users2")
+@Getter @Entity @Table(name = "users2")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String firstName;
-    private String lastName;
-    private LocalDate dateOfBirth;
 
-    public void updateData(UserRequest user) {
-        firstName = user.getFirstName();
-        lastName = user.getLastName();
-    }
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+  private String firstName;
+  private String lastName;
+  private LocalDate dateOfBirth;
+
+  public void updateData(UserRequest user) {
+    firstName = user.getFirstName();
+    lastName = user.getLastName();
+  }
 }

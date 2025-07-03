@@ -1,17 +1,22 @@
 package com.farid.Divar.Controllers;
 
-import com.farid.Divar.Library.ApiResource;
-import com.farid.Divar.Requests.UserRequest;
-import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import com.farid.Divar.Configs.AppConfig;
+import com.farid.Divar.Library.Resources.ApiResource;
 import com.farid.Divar.Models.User;
 import com.farid.Divar.Repositories.UserRepository;
+import com.farid.Divar.Requests.UserRequest;
 import com.farid.Divar.Resources.UserResource;
-
-import java.util.List;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 public class UserController {
@@ -25,9 +30,8 @@ public class UserController {
 	@GetMapping("/users")
 	public ResponseEntity<ApiResource<List<UserResource>>> index() {
 		List<User> users = repository.findAll();
-		List<UserResource> userResources = users.stream()
-				.map(user -> UserResource.from(user, UserResource.class))
-				.toList();
+		List<UserResource> userResources =
+				users.stream().map(user -> UserResource.from(user, UserResource.class)).toList();
 
 		return ResponseEntity.ok(new ApiResource<>(userResources));
 	}
@@ -49,7 +53,8 @@ public class UserController {
 	}
 
 	@PutMapping("users/{id}")
-	public ResponseEntity<ApiResource<UserResource>> update(@PathVariable int id, @RequestBody UserRequest updatingEntity) {
+	public ResponseEntity<ApiResource<UserResource>> update(@PathVariable int id,
+			@RequestBody UserRequest updatingEntity) {
 		return repository.findById(id).map(entity -> {
 			entity.updateData(updatingEntity);
 			repository.save(entity);
