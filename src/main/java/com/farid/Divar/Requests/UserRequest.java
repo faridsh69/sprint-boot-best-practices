@@ -1,50 +1,34 @@
 package com.farid.Divar.Requests;
 
-import java.time.LocalDate;
 import com.farid.Divar.Models.User;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
-// @Getter
+import java.time.LocalDate;
+
+@Getter
+@Setter
 public class UserRequest {
-  
+
   @NotBlank(message = "firstName is required")
+  @Size(min = 3, message = "firstName must be at least 3 characters")
   private String firstName;
 
-  @Size(min = 8, message = "lastName must be at least 3 characters")
-  @NotEmpty(message = "lastName is required.")
+  @NotBlank(message = "lastName is required")
   private String lastName;
 
-  @NotNull(message = "dateOfBirth is required.")
-  private LocalDate dateOfBirth;
-
-  // public String getFirstName() {
-  //   return firstName;
-  // }
-
-  // public String getLastName() {
-  //   return lastName;
-  // }
-
-  // public User toUser() {
-  //   return new User().setName(fullName).setEmail(email.toLowerCase()).setBirthDate(dateOfBirth)
-  //       .setGender(gender).setAddress(address.toAddress());
-  // }
+//  @NotBlank(message = "dateOfBirth is required")
+//  private String dateOfBirth;
 
   public User toEntity() {
     User user = new User();
-    System.out.println("XXXXXXXX");
-    System.out.println(this.firstName);
-    System.out.println(this);
-    System.out.println("YYYYYYY");
-
-
     user.setFirstName(this.firstName);
-    // user.setEmail(this.email);
-    // user.setPassword(this.password); // Optionally hash password here
-    
+    user.setLastName(this.lastName);
+//    user.setDateOfBirth(LocalDate.parse(this.dateOfBirth));
+
     return user;
   }
 }

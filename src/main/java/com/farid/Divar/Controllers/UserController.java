@@ -3,6 +3,7 @@ package com.farid.Divar.Controllers;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,14 +20,10 @@ import com.farid.Divar.Requests.UserRequest;
 import com.farid.Divar.Resources.UserResource;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping(path = "/api/users")
 public class UserController {
-
-	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
 	private final UserRepository repository;
 
@@ -52,9 +49,10 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResource<UserResource>> create(@Valid @RequestBody UserRequest request) {
-		// System.out.println(request);
-		// log.info("🚀 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX88888!");
+	public ResponseEntity<ApiResource> create(@Valid @RequestBody UserRequest request, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return ResponseEntity.badRequest().body(new ApiResource<>(bindingResult.getAllErrors()));
+		}
 
 		User entity = request.toEntity();
 		User savedEntity = repository.save(entity);
