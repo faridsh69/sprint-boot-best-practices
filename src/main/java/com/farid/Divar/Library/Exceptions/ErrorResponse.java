@@ -1,19 +1,14 @@
 package com.farid.Divar.Library.Exceptions;
 
-public class ErrorResponse {
-  private String error;
-  private int status;
+import java.util.List;
 
-  public ErrorResponse(String error, int status) {
-    this.error = error;
-    this.status = status;
-  }
-
-  public String getError() {
-    return error;
-  }
-
-  public int getStatus() {
-    return status;
-  }
+public record ErrorResponse(
+        String message,
+        int status,
+        List<ValidationError> validations
+) {
+    public ErrorResponse(String message, int status) {
+        this(message, status, null);
+    }
 }
+

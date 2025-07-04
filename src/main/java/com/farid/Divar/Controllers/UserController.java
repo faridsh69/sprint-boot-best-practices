@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/users")
+@Validated
 public class UserController {
 
 	private final UserRepository repository;
@@ -49,11 +51,7 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResource> create(@Valid @RequestBody UserRequest request, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return ResponseEntity.badRequest().body(new ApiResource<>(bindingResult.getAllErrors()));
-		}
-
+	public ResponseEntity<ApiResource<UserResource>> create(@Valid @RequestBody UserRequest request) {
 		User entity = request.toEntity();
 		User savedEntity = repository.save(entity);
 		UserResource resource = UserResource.from(savedEntity, UserResource.class);
