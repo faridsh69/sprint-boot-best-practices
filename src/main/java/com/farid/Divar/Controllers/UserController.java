@@ -1,6 +1,5 @@
 package com.farid.Divar.Controllers;
 
-import com.farid.Divar.Configs.AppConfig;
 import com.farid.Divar.Library.Resources.ApiResource;
 import com.farid.Divar.Models.User;
 import com.farid.Divar.Repositories.UserRepository;
@@ -8,12 +7,10 @@ import com.farid.Divar.Requests.UserRequest;
 import com.farid.Divar.Resources.UserResource;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -28,14 +25,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResource<List<UserResource>>> index(@RequestParam(required = false) String sort) {
+    public ResponseEntity<ApiResource<List<UserResource>>> index() {
         List<User> users = repository.findAll();
-        if (sort.equals("-id")) {
-            users.sort(Comparator.comparing(User::getId).reversed());
-        } else {
-            users.sort(Comparator.comparing(User::getId));
-        }
-
         List<UserResource> userResources =
                 users.stream().map(user -> UserResource.from(user, UserResource.class)).toList();
 
@@ -77,12 +68,5 @@ public class UserController {
 
             return ResponseEntity.ok(new ApiResource<>(entity));
         }).orElseThrow(EntityNotFoundException::new);
-    }
-
-    @Autowired
-    private AppConfig appConfig;
-
-    public String getAppName() {
-        return appConfig.getName();
     }
 }

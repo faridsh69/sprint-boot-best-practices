@@ -1,5 +1,6 @@
 package com.farid.Divar.Models;
 
+import com.farid.Divar.Configs.Gender;
 import com.farid.Divar.Requests.UserRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,11 +8,10 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-// @Setter @NoArgsConstructor @AllArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "users2")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -19,7 +19,13 @@ public class User {
     private Integer id;
     private String firstName;
     private String lastName;
-    private LocalDate dateOfBirth;
+    private String email;
+    private String password;
+    
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    private boolean active = false;
+    private LocalDate birthDate;
 
     public void updateData(UserRequest user) {
         firstName = user.getFirstName();

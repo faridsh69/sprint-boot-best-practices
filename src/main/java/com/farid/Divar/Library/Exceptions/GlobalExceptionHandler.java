@@ -16,19 +16,21 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Route not found in routing
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(NoResourceFoundException e) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorResponse response = new ErrorResponse(e.getMessage(), status.value());
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    // Entity not found in DB
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         String message = ex.getMessage() != null ? ex.getMessage() : "Entity not found";
         ErrorResponse response = new ErrorResponse(message, status.value());
-
-        return new ResponseEntity<>(response, status);
-    }
-
-    @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(NoResourceFoundException e) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        ErrorResponse response = new ErrorResponse(e.getMessage(), status.value());
 
         return new ResponseEntity<>(response, status);
     }
@@ -41,27 +43,25 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, status);
     }
 
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponse> handleException(ResponseStatusException ex) {
+        HttpStatusCode status = ex.getStatusCode();
+        ErrorResponse response = new ErrorResponse(ex.getMessage(), status.value());
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    // Validation errors
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-
-        List<ValidationError> validations = ex.getBindingResult().getFieldErrors().stream()
+        List<ValidationError> data = ex.getBindingResult().getFieldErrors().stream()
                 .map(validation -> new ValidationError(
                         validation.getField(),
                         validation.getDefaultMessage()
                 ))
                 .toList();
-
-        ErrorResponse response = new ErrorResponse("Validation failed", status.value(), validations);
-
-        return new ResponseEntity<>(response, status);
-
-    }
-
-    @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<ErrorResponse> handleException(ResponseStatusException ex) {
-        HttpStatusCode status = ex.getStatusCode();
-        ErrorResponse response = new ErrorResponse(ex.getMessage(), status.value());
+        ErrorResponse response = new ErrorResponse("Validation failed", status.value(), data);
 
         return new ResponseEntity<>(response, status);
     }
