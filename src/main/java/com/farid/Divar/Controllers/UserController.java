@@ -2,10 +2,9 @@ package com.farid.Divar.Controllers;
 
 import com.farid.Divar.Library.Resources.ApiResource;
 import com.farid.Divar.Models.User;
-import com.farid.Divar.Repositories.UserRepository;
 import com.farid.Divar.Requests.UserRequest;
 import com.farid.Divar.Resources.UserResource;
-import jakarta.persistence.EntityNotFoundException;
+import com.farid.Divar.Services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,55 +17,44 @@ import java.util.List;
 @Validated
 public class UserController {
 
-    private final UserRepository repository;
+    private final UserService service;
 
-    public UserController(UserRepository repository) {
-        this.repository = repository;
+    public UserController(UserService userService) {
+        this.service = userService;
     }
 
     @GetMapping
-    public ResponseEntity<ApiResource<List<UserResource>>> index() {
-        List<User> users = repository.findAll();
-        List<UserResource> userResources =
-                users.stream().map(user -> UserResource.from(user, UserResource.class)).toList();
+    public ApiResource<List<UserResource>> index() {
+        List<User> entities = service.index();
 
-        return ResponseEntity.ok(new ApiResource<>(userResources));
+        return new ApiResource<>(entities.stream().map(entity -> UserResource.from(entity, UserResource.class)).toList());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ApiResource<UserResource>> show(@PathVariable int id) {
-        User entity = repository.findById(id).orElseThrow(EntityNotFoundException::new);
-        UserResource resource = UserResource.from(entity, UserResource.class);
+    public ApiResource<UserResource> show(@PathVariable Integer id) {
+        User entity = service.show(id);
 
-        return ResponseEntity.ok(new ApiResource<>(resource));
+        return new ApiResource<>(UserResource.from(entity, UserResource.class));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResource<UserResource>> create(@Valid @RequestBody UserRequest request) {
-        User entity = request.toEntity();
-        User savedEntity = repository.save(entity);
-        UserResource resource = UserResource.from(savedEntity, UserResource.class);
+    public ApiResource<UserResource> create(@Valid @RequestBody UserRequest request) {
+        User entity = service.create(request);
 
-        return ResponseEntity.ok(new ApiResource<>(resource));
+        return new ApiResource<>(UserResource.from(entity, UserResource.class));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ApiResource<UserResource>> update(@PathVariable int id, @Valid @RequestBody UserRequest request) {
-        return repository.findById(id).map(entity -> {
-            entity.updateData(request);
-            repository.save(entity);
-            UserResource resource = UserResource.from(entity, UserResource.class);
+    public ApiResource<UserResource> update(@PathVariable Integer id, @Valid @RequestBody UserRequest request) {
+        User entity = service.update(id, request);
 
-            return ResponseEntity.ok(new ApiResource<>(resource));
-        }).orElseThrow(EntityNotFoundException::new);
+        return new ApiResource<>(UserResource.from(entity, UserResource.class));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ApiResource<User>> delete(@PathVariable int id) {
-        return repository.findById(id).map(entity -> {
-            repository.delete(entity);
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        service.delete(id);
 
-            return ResponseEntity.ok(new ApiResource<>(entity));
-        }).orElseThrow(EntityNotFoundException::new);
+        return ResponseEntity.noContent().build();
     }
 }
