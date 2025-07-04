@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private boolean active = false;
@@ -31,4 +32,7 @@ public class User {
         firstName = user.getFirstName();
         lastName = user.getLastName();
     }
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Blog> blogs;
 }

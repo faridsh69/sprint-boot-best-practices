@@ -18,12 +18,14 @@ public class UserRequest {
     @NotBlank(message = "lastName is required")
     private String lastName;
 
+    @NotBlank(message = "email is required")
     @Email(message = "Invalid email format")
     private String email;
 
     @Past(message = "Birth date must be in the past")
     private LocalDate birthDate;
 
+    @NotBlank(message = "password is required")
     @Pattern(
             regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$",
             message = "Password must be at least 6 characters and contain both letters and numbers"

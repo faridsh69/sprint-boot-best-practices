@@ -16,5 +16,8 @@ public class Blog {
     private String title;
     private int price;
     private boolean active = true;
-    private Integer userId;
+    
+    @ManyToOne
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
 }
