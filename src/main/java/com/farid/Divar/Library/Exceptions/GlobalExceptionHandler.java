@@ -41,31 +41,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, status);
     }
 
-    //  @ExceptionHandler(MethodArgumentNotValidException.class)
-//  public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-//    Map<String, String> errors = new HashMap<>();
-//    ex.getBindingResult().getFieldErrors().forEach(error ->
-//            errors.put(error.getField(), error.getDefaultMessage())
-//    );
-//    return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-//  }
-
-//  @ExceptionHandler(ConstraintViolationException.class) // This will needed if we need validation inside controller
-//  public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
-//    HttpStatus status = HttpStatus.BAD_REQUEST;
-//
-//    List<ValidationError> validations = ex.getConstraintViolations().stream()
-//      .map(violation -> new ValidationError(
-//              violation.getPropertyPath().toString(),
-//              violation.getMessage()
-//      ))
-//      .toList();
-//    ErrorResponse response = new ErrorResponse("Validation failed", status.value(), validations);
-//
-//    return new ResponseEntity<>(response, status);
-//  }
-
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
@@ -82,7 +57,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, status);
 
     }
-
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponse> handleException(ResponseStatusException ex) {

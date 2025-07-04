@@ -10,22 +10,19 @@ import lombok.Setter;
 @Setter
 public class UserRequest {
 
-  @NotBlank(message = "firstName is required")
-  @Size(min = 3, message = "firstName must be at least 3 characters")
-  private String firstName;
+    @NotBlank(message = "firstName is required")
+    @Size(min = 3, message = "firstName must be at least 3 characters")
+    private String firstName;
 
-  @NotBlank(message = "lastName is required")
-  private String lastName;
+    @NotBlank(message = "lastName is required")
+    private String lastName;
 
-//  @NotBlank(message = "dateOfBirth is required")
-//  private String dateOfBirth;
 
-  public User toEntity() {
-    User user = new User();
-    user.setFirstName(this.firstName);
-    user.setLastName(this.lastName);
-//    user.setDateOfBirth(LocalDate.parse(this.dateOfBirth));
+    public User toEntity() {
+        User user = new User();
+        user.setFirstName(this.firstName);
+        user.setLastName(this.lastName);
 
-    return user;
-  }
+        return user;
+    }
 }
