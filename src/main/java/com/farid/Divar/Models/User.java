@@ -1,12 +1,12 @@
 package com.farid.Divar.Models;
 
 import com.farid.Divar.Configs.Gender;
-import com.farid.Divar.Requests.UserRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,12 +27,7 @@ public class User {
     private Gender gender;
     private boolean active = false;
     private LocalDate birthDate;
-
-    public void updateData(UserRequest user) {
-        firstName = user.getFirstName();
-        lastName = user.getLastName();
-    }
-
+    
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Blog> blogs;
+    private List<Blog> blogs = new ArrayList<>();
 }

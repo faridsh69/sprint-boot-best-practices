@@ -1,6 +1,7 @@
 package com.farid.Divar.Requests;
 
 import com.farid.Divar.Configs.Gender;
+import com.farid.Divar.Library.Requests.RequestInterface;
 import com.farid.Divar.Models.User;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class UserRequest {
+public class UserRequest implements RequestInterface<User> {
 
     @Size(min = 3, message = "firstName must be at least 2 characters")
     private String firstName;
@@ -34,10 +35,16 @@ public class UserRequest {
     private Gender gender;
     private boolean active;
 
+    @Override
     public User toEntity() {
         User user = new User();
         user.setFirstName(this.firstName);
         user.setLastName(this.lastName);
+        user.setEmail(this.email);
+        user.setBirthDate(this.birthDate);
+        user.setPassword(this.password);
+        user.setGender(this.gender);
+        user.setActive(this.active);
 
         return user;
     }
