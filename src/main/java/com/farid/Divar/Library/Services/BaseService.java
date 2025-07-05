@@ -3,7 +3,6 @@ package com.farid.Divar.Library.Services;
 import com.farid.Divar.Library.Requests.RequestInterface;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -19,7 +18,6 @@ public class BaseService<T, ID, TR extends RequestInterface<T>> {
         return repository.findAll();
     }
 
-    @Cacheable(value = "users", key = "#id")
     public T show(ID id) {
         return repository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
