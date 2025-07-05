@@ -10,6 +10,6 @@ import org.springframework.stereotype.Service;
 public class UserService extends BaseService<User, Integer, UserRequest> {
 
     public UserService(UserRepository userRepository) {
-        super(userRepository);
+        super(userRepository, User.class);
     }
 }
