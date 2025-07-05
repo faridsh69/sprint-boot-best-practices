@@ -7,37 +7,37 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public class BaseService<T, ID, TR extends BaseRequest<T>> {
-    protected final JpaRepository<T, ID> repository;
-    private final Class<T> entityClass;
+public class BaseService<TEntity, ID, TRequest extends BaseRequest<TEntity>> {
+    protected final JpaRepository<TEntity, ID> repository;
+    private final Class<TEntity> entityClass;
 
-    protected BaseService(JpaRepository<T, ID> repository, Class<T> entityClass) {
+    protected BaseService(JpaRepository<TEntity, ID> repository, Class<TEntity> entityClass) {
         this.repository = repository;
         this.entityClass = entityClass;
     }
 
-    public List<T> index() {
+    public List<TEntity> index() {
         return repository.findAll();
     }
 
-    public T show(ID id) {
+    public TEntity show(ID id) {
         return repository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public T create(TR request) {
+    public TEntity create(TRequest request) {
         return repository.save(request.toEntity(entityClass));
     }
 
-    public T update(ID id, TR request) {
-        T entity = show(id);
-        T updatedData = request.toEntity(entityClass);
+    public TEntity update(ID id, TRequest request) {
+        TEntity entity = show(id);
+        TEntity updatedData = request.toEntity(entityClass);
         BeanUtils.copyProperties(updatedData, entity, "id");
 
         return repository.save(entity);
     }
 
     public void delete(ID id) {
-        T entity = show(id);
+        TEntity entity = show(id);
         repository.delete(entity);
     }
 }
