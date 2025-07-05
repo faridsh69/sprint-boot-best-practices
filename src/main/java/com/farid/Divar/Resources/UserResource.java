@@ -5,8 +5,6 @@ import com.farid.Divar.Library.Resources.BaseResource;
 import com.farid.Divar.Models.User;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter()
 public class UserResource extends BaseResource<User> {
     private Integer id;
@@ -16,7 +14,7 @@ public class UserResource extends BaseResource<User> {
     private String email;
     private Gender gender;
     private boolean active = false;
-    private List<BlogResource> blogs;
+//    private final List<BlogResource> blogs = new ArrayList<>();
 
     @Override
     public void toResource(User user) {
@@ -26,6 +24,7 @@ public class UserResource extends BaseResource<User> {
         fullName = user.getFirstName() + " " + user.getLastName();
         email = user.getEmail();
         gender = user.getGender();
-        blogs = user.getBlogs().stream().map(blog -> BlogResource.from(blog, BlogResource.class)).toList();
+        active = user.isActive();
+//        blogs = user.getBlogs().stream().map(blog -> BlogResource.from(blog, BlogResource.class)).toList();
     }
 }

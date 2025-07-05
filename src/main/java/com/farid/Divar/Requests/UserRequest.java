@@ -13,7 +13,8 @@ import java.time.LocalDate;
 @Setter
 public class UserRequest extends BaseRequest<User> {
 
-    @Size(min = 3, message = "firstName must be at least 2 characters")
+    @NotBlank(message = "firstName is required")
+    @Size(min = 2, message = "firstName must be at least 2 characters")
     private String firstName;
 
     @NotBlank(message = "lastName is required")

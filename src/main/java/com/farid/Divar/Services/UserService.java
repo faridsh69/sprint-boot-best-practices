@@ -7,7 +7,7 @@ import com.farid.Divar.Requests.UserRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService extends BaseService<User, Integer, UserRequest> {
+public class UserService extends BaseService<User, UserRequest> {
 
     public UserService(UserRepository userRepository) {
         super(userRepository, User.class);

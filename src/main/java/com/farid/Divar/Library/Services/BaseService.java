@@ -7,28 +7,34 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public class BaseService<TEntity, ID, TRequest extends BaseRequest<TEntity>> {
-    protected final JpaRepository<TEntity, ID> repository;
+public abstract class BaseService<TEntity, TRequest extends BaseRequest<TEntity>>
+        implements IBaseService<TEntity, TRequest> {
+
+    protected final JpaRepository<TEntity, Integer> repository;
     private final Class<TEntity> entityClass;
 
-    protected BaseService(JpaRepository<TEntity, ID> repository, Class<TEntity> entityClass) {
+    protected BaseService(JpaRepository<TEntity, Integer> repository, Class<TEntity> entityClass) {
         this.repository = repository;
         this.entityClass = entityClass;
     }
 
+    @Override
     public List<TEntity> index() {
         return repository.findAll();
     }
 
-    public TEntity show(ID id) {
+    @Override
+    public TEntity show(Integer id) {
         return repository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Override
     public TEntity create(TRequest request) {
         return repository.save(request.toEntity(entityClass));
     }
 
-    public TEntity update(ID id, TRequest request) {
+    @Override
+    public TEntity update(Integer id, TRequest request) {
         TEntity entity = show(id);
         TEntity updatedData = request.toEntity(entityClass);
         BeanUtils.copyProperties(updatedData, entity, "id");
@@ -36,7 +42,8 @@ public class BaseService<TEntity, ID, TRequest extends BaseRequest<TEntity>> {
         return repository.save(entity);
     }
 
-    public void delete(ID id) {
+    @Override
+    public void delete(Integer id) {
         TEntity entity = show(id);
         repository.delete(entity);
     }

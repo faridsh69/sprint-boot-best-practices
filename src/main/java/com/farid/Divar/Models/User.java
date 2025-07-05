@@ -27,7 +27,7 @@ public class User {
     private Gender gender;
     private boolean active = false;
     private LocalDate birthDate;
-    
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Blog> blogs = new ArrayList<>();
 }
