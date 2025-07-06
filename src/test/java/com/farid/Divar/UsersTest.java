@@ -24,4 +24,11 @@ public class UsersTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void testIndexReturnsAllBlogs() throws Exception {
+        mockMvc.perform(get("/api/blogs"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }

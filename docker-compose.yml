@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    environment:
+      POSTGRES_USER: farid2
+      POSTGRES_PASSWORD: farid2
+      POSTGRES_DB: farid2
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: spring-app
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/farid2
+      SPRING_DATASOURCE_USERNAME: farid2
+      SPRING_DATASOURCE_PASSWORD: farid2
+    ports:
+      - "8080:8080"
