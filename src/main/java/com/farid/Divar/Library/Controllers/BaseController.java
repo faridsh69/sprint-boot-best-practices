@@ -26,7 +26,7 @@ public abstract class BaseController<
     public ApiResource<List<TResource>> index() {
         List<TEntity> entities = getService().index();
         List<TResource> resources = entities.stream()
-                .map(e -> convertToResource(e))
+                .map(this::convertToResource)
                 .toList();
 
         return new ApiResource<>(resources);
