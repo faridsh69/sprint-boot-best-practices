@@ -15,9 +15,16 @@ public class DivarApplication {
     }
 
     @Bean
-    CommandLineRunner seedData(UserSeeder userSeeder) {
+    CommandLineRunner runCommands(UserSeeder userSeeder) {
+        // Move this to CommandsServices
         return args -> {
-            userSeeder.seed();
+            if (args.length == 0) return;
+
+            if ("db:seed".equals(args[0])) {
+                userSeeder.seed();
+            }
+
+            // We can have other commands here
         };
     }
 }
